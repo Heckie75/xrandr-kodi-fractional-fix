@@ -52,7 +52,13 @@ Instead of wrapping Kodi or toggling system desktop settings back and forth, you
    ./fix_kodi_resolution.sh --dry-run
    ```
 
-5. **Add to Startup Applications:**
+5. **Reset the fix:**
+   ```bash
+   ./fix_kodi_resolution.sh --reset
+   ```
+   Use this after closing Kodi or before launching Wine if you need to restore normal X11 panning.
+
+6. **Add to Startup Applications:**
 * Open Startup Applications in your desktop settings (e.g., Linux Mint Cinnamon Menu -> Startup Applications).
 * Add a new custom command pointing to the absolute path of `fix_kodi_resolution.sh`.
 * Use a command like:
@@ -62,6 +68,8 @@ Instead of wrapping Kodi or toggling system desktop settings back and forth, you
 * Set a small delay (2–3 seconds) to ensure the display manager has finished initializing.
 
 > Note: If you change the fractional scaling factor after login, you must rerun this script so Kodi receives the updated panning settings.
+>
+> **Warning:** This script changes the X11 panning viewport. Wine applications may stop refreshing correctly outside the panned region while the fix is active. If you use Wine, apply the fix only before launching Kodi and reset it afterward.
 
 ## Compatibility
 Tested and confirmed working on:
@@ -75,6 +83,7 @@ Tested and confirmed working on:
 * If the script reports "No active monitor found", verify you are running under X11 and that `xrandr --current` shows a connected output.
 * If the scale factor cannot be parsed, run `xrandr --current --verbose` and inspect the `Transform:` values for your active monitor.
 * Use `./fix_kodi_resolution.sh --dry-run` to confirm the generated xrandr command before applying it.
+* If Wine applications stop updating correctly after applying the fix, run `./fix_kodi_resolution.sh --reset` to restore normal X11 panning before launching Wine.
 
 ## License
 MIT License - feel free to modify and share!

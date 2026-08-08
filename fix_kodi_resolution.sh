@@ -3,13 +3,14 @@ set -euo pipefail
 
 usage() {
     cat <<'EOF'
-Usage: fix_kodi_resolution.sh [--dry-run|-n] [--help|-h]
+Usage: fix_kodi_resolution.sh [--dry-run|-n] [--reset|-r] [--help|-h]
 
 Apply an X11 xrandr panning fix for Kodi fullscreen when fractional scaling is enabled.
 EOF
 }
 
 DRY_RUN=0
+RESET=0
 while [ "$#" -gt 0 ]; do
     case "$1" in
         -h|--help)
@@ -18,6 +19,9 @@ while [ "$#" -gt 0 ]; do
             ;;
         -n|--dry-run)
             DRY_RUN=1
+            ;;
+        -r|--reset)
+            RESET=1
             ;;
         *)
             echo "Unknown option: $1" >&2
@@ -77,6 +81,16 @@ SCALE_PARAM="${SCALE_X}x${SCALE_Y}"
 printf 'Monitor:            %s\n' "$MONITOR"
 printf 'Native Resolution:  %sx%s\n' "$WIDTH" "$HEIGHT"
 printf 'Current Scale:      %s\n' "$SCALE_PARAM"
+
+if [ "$RESET" -eq 1 ]; then
+    if [ "$DRY_RUN" -eq 1 ]; then
+        echo "Dry run: xrandr --output $MONITOR --panning 0x0"
+        exit 0
+    fi
+
+    xrandr --output "$MONITOR" --panning 0x0
+    exit 0
+fi
 
 if [ "$DRY_RUN" -eq 1 ]; then
     echo "Dry run: xrandr --output $MONITOR --scale $SCALE_PARAM --panning ${WIDTH}x${HEIGHT}"
