@@ -55,7 +55,13 @@ Instead of wrapping Kodi or toggling system desktop settings back and forth, you
 5. **Add to Startup Applications:**
 * Open Startup Applications in your desktop settings (e.g., Linux Mint Cinnamon Menu -> Startup Applications).
 * Add a new custom command pointing to the absolute path of `fix_kodi_resolution.sh`.
+* Use a command like:
+   ```bash
+   /home/your-user/bin/xrandr-kodi-fractional-fix/fix_kodi_resolution.sh
+   ```
 * Set a small delay (2–3 seconds) to ensure the display manager has finished initializing.
+
+> Note: If you change the fractional scaling factor after login, you must rerun this script so Kodi receives the updated panning settings.
 
 ## Compatibility
 Tested and confirmed working on:
